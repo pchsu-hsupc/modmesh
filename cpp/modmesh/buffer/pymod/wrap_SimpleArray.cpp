@@ -449,6 +449,7 @@ class MODMESH_PYTHON_WRAPPER_VISIBILITY WrapSimpleArray
         namespace py = pybind11; // NOLINT(misc-unused-alias-decls)
 
         (*this)
+            .def("lt", &wrapped_type::lt)
             .def("argmin", &wrapped_type::argmin)
             .def("argmax", &wrapped_type::argmax)
             //

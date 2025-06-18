@@ -1616,6 +1616,61 @@ class SimpleArrayCalculatorsTC(unittest.TestCase):
 
 class SimpleArraySearchTC(unittest.TestCase):
 
+    def type_convertor(self, dtype):
+        return {
+            'int8': modmesh.SimpleArrayInt8,
+            'int16': modmesh.SimpleArrayInt16,
+            'int32': modmesh.SimpleArrayInt32,
+            'int64': modmesh.SimpleArrayInt64,
+            'uint8': modmesh.SimpleArrayUint8,
+            'uint16': modmesh.SimpleArrayUint16,
+            'uint32': modmesh.SimpleArrayUint32,
+            'uint64': modmesh.SimpleArrayUint64,
+            'float32': modmesh.SimpleArrayFloat32,
+            'float64': modmesh.SimpleArrayFloat64,
+        }[dtype]
+
+    def test_lt(self):
+        def test_lt_type(type):
+            arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            arr2 = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+            res = [True, True, True, True, True, 
+                   False, False, False, False, False]  # < 6
+            narr1 = np.array(arr1, dtype=type)
+            narr2 = np.array(arr2, dtype=type)
+            sarr1 = self.type_convertor(type)(array=narr1)
+            sarr2 = self.type_convertor(type)(array=narr2)
+            nres = narr1 < narr2
+            sres = sarr1.lt(sarr2)
+            for i in range(len(res)):
+                self.assertEqual(sres[i], res[i])
+                self.assertEqual(sres[i], nres[i])
+
+        test_lt_type('int8')
+        test_lt_type('int16')
+        test_lt_type('int32')
+        test_lt_type('int64')
+        test_lt_type('uint8')
+        test_lt_type('uint16')
+        test_lt_type('uint32')
+        test_lt_type('uint64')
+        test_lt_type('float32')
+        test_lt_type('float64')
+
+        # test boolean
+        arr1 = [True, False, True, False]
+        arr2 = [False, False, True, False]
+        res = [False, False, False, False]  # True < False is False
+        narr1 = np.array(arr1, dtype='bool')
+        narr2 = np.array(arr2, dtype='bool')
+        sarr1 = modmesh.SimpleArrayBool(array=narr1)
+        sarr2 = modmesh.SimpleArrayBool(array=narr2)
+        nres = narr1 < narr2
+        sres = sarr1.lt(sarr2)
+        for i in range(len(res)):
+            self.assertEqual(sres[i], res[i])
+            self.assertEqual(sres[i], nres[i])
+
     def test_argminmax(self):
         # test 1-D data
         data = [1, 3, 5, 7, 9]

@@ -735,6 +735,8 @@ public:
 
     using value_type = typename internal_types::value_type;
 
+    SimpleArray<bool> lt(A const & other) const;
+    
     size_t argmin() const
     {
         size_t min_index = 0;
@@ -1496,6 +1498,18 @@ A detail::SimpleArrayMixinSort<A, T>::take_along_axis_simd(SimpleArray<I> const 
     T * dest = ret.begin();
     detail::indexed_copy(dest, data, src, end);
     return ret;
+}
+
+template <typename A, typename T>
+SimpleArray<bool> detail::SimpleArrayMixinSearch<A, T>::lt(A const & other) const
+{
+    auto athis = static_cast<A const *>(this);
+    SimpleArray<bool> result(athis->size());
+    for (size_t i = 0; i < athis->size(); ++i)
+    {
+        result.data(i) = athis->data(i) < other.data(i);
+    }
+    return result;
 }
 
 template <typename S>
