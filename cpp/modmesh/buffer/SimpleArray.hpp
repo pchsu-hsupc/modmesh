@@ -1507,7 +1507,7 @@ SimpleArray<bool> detail::SimpleArrayMixinSearch<A, T>::lt(A const & other) cons
     SimpleArray<bool> result(athis->size());
     for (size_t i = 0; i < athis->size(); ++i)
     {
-        result.data(i) = athis->data(i) < other.data(i);
+        result[i] = athis->data(i) < other.data(i);
     }
     return result;
 }
